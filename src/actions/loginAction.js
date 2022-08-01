@@ -1,12 +1,12 @@
 import * as ActionTypes from '../constants/loginConstant';
 import  axios  from 'axios'
 
-export const LoginUserAction=()=>async(dispatch)=>{
+export const LoginUserAction=(data)=>async(dispatch)=>{
     try {
         dispatch({
             type:ActionTypes.LOGIN_REQUEST
         });
-        const response= await axios.get(`https://api.escuelajs.co/api/v1/products`);
+        const response= await axios.post(`https://localhost:44387/api/Authentication/login`, data);
         dispatch({
             type:ActionTypes.LOGIN_SUCCESS,
             payload: response

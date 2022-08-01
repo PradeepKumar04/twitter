@@ -7,13 +7,7 @@ import { LoginUserAction } from '../actions/loginAction';
 
 const Home = () => {
   const [focus,setFocus]=useState(false);
-  const dispatch=useDispatch();
-  const loginData=useSelector(state=>state.login);
-  console.log(loginData);
-
-  useEffect(()=>{
-    dispatch(LoginUserAction())
-  },[dispatch])
+  
 
 
   return (

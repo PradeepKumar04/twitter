@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React, {useState,useEffect, memo} from 'react'
+import { LoginUserAction } from '../actions/loginAction';
 import classes from './LoginUser.module.css';
+import {useSelector,useDispatch} from 'react-redux';
 
 var initialState={
     isTouched:false,
     isvalid:false
 }
 const LoginUser = (props) => {
+
+    
+
     const [isPassword,setPassword]=useState(true);
     const [usernameValue,setUsernameValue]=useState(initialState);
     const [passwordValue,setPasswordValue]=useState(initialState);
@@ -13,6 +18,9 @@ const LoginUser = (props) => {
     const [passwordError,setPasswordError]=useState('');
     const [username,setUsername]=useState('');
     const [password,setpassword]=useState('');
+
+    const dispatch=useDispatch();
+    const loginData=useSelector(state=>state.login);
 
     const onUsernameChange=(e)=>{
         setUsernameValue({isTouched:true,isvalid: e.target.value.length>4})
@@ -53,10 +61,16 @@ const LoginUser = (props) => {
     const onFormSubmit=(e)=>{
         e.preventDefault();
         if(usernameValue.isvalid && passwordValue.isvalid){
-            console.log(usernameValue,passwordValue);
-            console.log(username,password);
+            let data ={
+                UserName:username,
+                Password:password
+            };
+      dispatch(LoginUserAction(data))
             setpassword('');
             setUsername('');
+            
+            
+            console.log(loginData);
             setUsernameValue(initialState);
             setPasswordValue(initialState);
         }
