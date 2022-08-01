@@ -1,0 +1,30 @@
+.eye{
+    cursor: pointer;
+    margin-left: -140%;
+    margin-top: 2%;
+}
+
+.container{
+    font-size: 17px;
+}
+
+.button{
+    color: white;
+    background-color: #1DA1F2;
+    font-size: 17px;
+    width: 180%;
+}
+
+.label{
+    font-weight: 400;
+}
+
+.para{
+    color: #1DA1F2;
+    cursor: pointer;
+    float: right;
+}
+
+.formErrors{
+    color: red;
+}

@@ -1,0 +1,24 @@
+.addTweet{
+    position: fixed;
+right:    55px;
+bottom:   50px;
+background-color: #1DA1F2;
+justify-content: end;
+display: flex;
+height: 70px;
+width: 70px;
+border: none;
+border-radius: 50px;
+}
+
+
+.twitterIcon{
+    font-size: 70px;
+}
+
+.fa-twitter:before {
+    content: "\f099";
+    font-size: 60px;
+    color: white;
+    padding-top: 10px;
+}
