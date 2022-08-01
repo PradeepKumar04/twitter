@@ -1,6 +1,7 @@
 import React, {useState,useEffect, memo} from 'react'
 import { LoginUserAction } from '../actions/loginAction';
 import classes from './LoginUser.module.css';
+import { toast,ToastContainer } from "react-toastify";
 import {useSelector,useDispatch} from 'react-redux';
 
 var initialState={
@@ -21,7 +22,7 @@ const LoginUser = (props) => {
 
     const dispatch=useDispatch();
     const loginData=useSelector(state=>state.login);
-
+    
     const onUsernameChange=(e)=>{
         setUsernameValue({isTouched:true,isvalid: e.target.value.length>4})
         if(e.target.value==""){
@@ -66,6 +67,12 @@ const LoginUser = (props) => {
                 Password:password
             };
       dispatch(LoginUserAction(data))
+        if(loginData.data.data.success){
+            toast.success(loginData.data.data,message,{autoClose:3000});
+        }
+        else{
+            toast.error(loginData.data.data,message,{autoClose:3000});
+        }
             setpassword('');
             setUsername('');
             
