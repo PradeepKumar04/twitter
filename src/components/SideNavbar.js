@@ -101,6 +101,7 @@ const SideNavbar = () => {
 
       </nav>
       <section class="home">
+        
         <Switch>
                 <Route exact  path='/home' component={Home} />
                 <Route exact path='/account' component={Login} />

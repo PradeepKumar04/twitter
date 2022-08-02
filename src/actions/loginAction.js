@@ -14,7 +14,8 @@ export const LoginUserAction=(data)=>async(dispatch)=>{
     } catch (error) {
         dispatch({
             type: ActionTypes.LOGIN_FAILURE,
-            error:error.message
+            error:error.message,
+            payload: null
         })
     }
 }

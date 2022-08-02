@@ -3,6 +3,8 @@ import { LoginUserAction } from '../actions/loginAction';
 import classes from './LoginUser.module.css';
 import { toast,ToastContainer } from "react-toastify";
 import {useSelector,useDispatch} from 'react-redux';
+import 'react-toastify/dist/ReactToastify.css';
+import { useHistory } from 'react-router-dom';
 
 var initialState={
     isTouched:false,
@@ -11,20 +13,24 @@ var initialState={
 const LoginUser = (props) => {
 
     
-
     const [isPassword,setPassword]=useState(true);
+    const [response,setResponse]=useState('');
     const [usernameValue,setUsernameValue]=useState(initialState);
     const [passwordValue,setPasswordValue]=useState(initialState);
     const [userNameError,setUsernameError]=useState('');
     const [passwordError,setPasswordError]=useState('');
     const [username,setUsername]=useState('');
     const [password,setpassword]=useState('');
+    const [formSubmit,onSubmit]=useState(false);
 
     const dispatch=useDispatch();
+    const history=useHistory();
+   
     const loginData=useSelector(state=>state.login);
     
     const onUsernameChange=(e)=>{
         setUsernameValue({isTouched:true,isvalid: e.target.value.length>4})
+        loginData.data= null;
         if(e.target.value==""){
             setUsernameError("Required");
         }
@@ -35,6 +41,7 @@ const LoginUser = (props) => {
 
     const onPasswordChange=(e)=>{
         setPasswordValue({isTouched:true,isvalid: e.target.value.length>5})
+        loginData.data=null;
         if(e.target.value==""){
             setPasswordError("Required");
         }
@@ -59,33 +66,34 @@ const LoginUser = (props) => {
         setUsername(e.target.value);
     }
 
-    const onFormSubmit=(e)=>{
+    const onFormSubmit=async(e)=>{
         e.preventDefault();
-        if(usernameValue.isvalid && passwordValue.isvalid){
+        if((usernameValue.isvalid && passwordValue.isvalid) || (username.length>5 && password.length>5)){
             let data ={
                 UserName:username,
                 Password:password
             };
-      dispatch(LoginUserAction(data))
-        if(loginData.data.data.success){
-            toast.success(loginData.data.data,message,{autoClose:3000});
-        }
-        else{
-            toast.error(loginData.data.data,message,{autoClose:3000});
-        }
-            setpassword('');
-            setUsername('');
-            
-            
-            console.log(loginData);
+     await dispatch(LoginUserAction(data))
+      onSubmit(true);
+      setpassword('');
+      setUsername('');
+            console.log(loginData); 
             setUsernameValue(initialState);
             setPasswordValue(initialState);
         }
     }
 
   return (
+    <div>
+        
     <div className={'container '+classes.container}>
         <form onSubmit={onFormSubmit}>
+            <div className='row m-5'>
+                {
+                    loginData.data!=null && !loginData.data.data.success &&
+                     <p className={'text-center ' +classes.formErrors}>{loginData.data.data.message}</p>
+                }
+            </div>
             <div className='row m-5'>
                 <div className='col-2'>
                 <label className={classes.label} for="username"> User Name:</label>
@@ -125,6 +133,7 @@ const LoginUser = (props) => {
             </div>
         </form>
         <p className={classes.para} onClick={onRegister}>don't have account? register here</p>
+    </div>
     </div>
   )
 }

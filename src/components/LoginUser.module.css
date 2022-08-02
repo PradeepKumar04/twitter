@@ -8,6 +8,10 @@
     font-size: 17px;
 }
 
+.toastmessage{
+    width: 100%;
+}
+
 .button{
     color: white;
     background-color: #1DA1F2;

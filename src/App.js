@@ -9,6 +9,7 @@ import Signup from './screens/Signup';
 function App() {
   return (
     <>
+    <div id="toast"></div>
     <SideNavbar/>
       
     </>
