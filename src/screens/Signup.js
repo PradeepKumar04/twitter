@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import classes from './Signup.module.css';
+import  Axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 
 const initialState={
@@ -9,6 +12,11 @@ const initialState={
 }
 
 const Signup = (props) => {
+
+    const dispatch=useDispatch();
+    const history=useHistory();
+   
+    const loginData=useSelector(state=>state.login);
 
     const formIsDirty = true; 
     const onLogin=()=>{
@@ -54,37 +62,47 @@ const Signup = (props) => {
         }
     }
 
-    const onFormSubmit=(e)=>{
+    const onFormSubmit= async (e)=>{
         e.preventDefault();
-        if(confirmPassword!==password){
-            changeConfirmPasswordValidation({isTouched:true,isValid:false,error:'Password must be match with confirm password'});
-        }
-        if(!firstnameValidation.isValid){
-            changeFirstnameValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(!lastnameValidation.isValid){
-            changeLastnameValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(!emailValidation.isValid){
-            changeEmailValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(!usernameValidation.isValid){
-            changeUsernameValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(!phonenumberValidation.isValid){
-            changePhonenumerValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(!dateofBirthValidation.isValid){
-            changeDateofBirthValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(!passwordValidation.isValid){
-            changePasswordValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(!confirmPasswordValidation.isValid){
-            changeConfirmPasswordValidation({isTouched:true,isValid:false,error:'Required'});
-        }
-         if(gender==="0"){
-            changeGenderValidation({isTouched:true,isValid:false,error:'Required'});
+        
+            if(confirmPassword!==password){
+                changeConfirmPasswordValidation({isTouched:true,isValid:false,error:'Password must be match with confirm password'});
+            }
+            if(!firstnameValidation.isValid){
+                changeFirstnameValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(!lastnameValidation.isValid){
+                changeLastnameValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(!emailValidation.isValid){
+                changeEmailValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(!usernameValidation.isValid){
+                changeUsernameValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(!phonenumberValidation.isValid){
+                changePhonenumerValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(!dateofBirthValidation.isValid){
+                changeDateofBirthValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(!passwordValidation.isValid){
+                changePasswordValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(!confirmPasswordValidation.isValid){
+                changeConfirmPasswordValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+             if(gender==="0"){
+                changeGenderValidation({isTouched:true,isValid:false,error:'Required'});
+            }
+        
+            // const formData=new FormData()
+            // formData.append("file",profilePic);
+            // formData.append("upload_preset","midc4hmi");
+            // var data=await Axios.post('https://api.cloudinary.com/v1_1/dcpyzzvui/image/upload',formData);
+            // console.log(data);
+        if(firstnameValidation.isValid && lastnameValidation.isValid && emailValidation.isValid && usernameValidation.isValid && phonenumberValidation.isValid && dateofBirthValidation.isValid && passwordValidation.isValid && confirmPasswordValidation.isValid && gender!=="0"){
+            
         }
     }
     
