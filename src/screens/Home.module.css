@@ -22,3 +22,12 @@ border-radius: 50px;
     color: white;
     padding-top: 10px;
 }
+
+.trendscol{
+    margin: inherit;
+    margin-left: -20px;
+}
+
+.col{
+    margin: inherit;
+}

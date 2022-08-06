@@ -5,6 +5,7 @@ import { BrowserRouter,Switch, Routes, Route } from 'react-router-dom';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import Home from '../screens/Home';
+import ProtectedRoute from '../auth/ProtectedRoute';
 
 const SideNavbar = () => {
 
@@ -103,7 +104,8 @@ const SideNavbar = () => {
       <section class="home">
         
         <Switch>
-                <Route exact  path='/home' component={Home} />
+                {/* <Route exact  path='/home' component={Home} /> */}
+                <ProtectedRoute  path='/home' component={Home} />
                 <Route exact path='/account' component={Login} />
         </Switch>
     </section>

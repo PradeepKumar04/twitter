@@ -2,8 +2,8 @@ import React, {useState,useEffect, memo} from 'react'
 import { LoginUserAction } from '../actions/loginAction';
 import classes from './LoginUser.module.css';
 import { toast,ToastContainer } from "react-toastify";
-import {useSelector,useDispatch} from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
+import {useSelector,useDispatch} from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 var initialState={
@@ -27,7 +27,27 @@ const LoginUser = (props) => {
     const history=useHistory();
    
     const loginData=useSelector(state=>state.login);
+
+    useEffect(()=>{
+        if(loginData.data != null){
+            console.log(loginData.data);
+           localStorage.setItem('token',`Bearer ${loginData.data.data}`);
+           let userdata =parseJwt(loginData.data.data);
+           console.log(userdata);
+           localStorage.setItem('username',userdata['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'])
+        }
+    },[loginData])
+
+    function parseJwt (token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
     
+        return JSON.parse(jsonPayload);
+    };
+
     const onUsernameChange=(e)=>{
         setUsernameValue({isTouched:true,isvalid: e.target.value.length>4})
         loginData.data= null;
@@ -74,10 +94,13 @@ const LoginUser = (props) => {
                 Password:password
             };
      await dispatch(LoginUserAction(data))
+     if(loginData.data.success){
+        history.push('/home');
+    }
       onSubmit(true);
       setpassword('');
       setUsername('');
-            console.log(loginData); 
+            console.log(loginData);
             setUsernameValue(initialState);
             setPasswordValue(initialState);
         }

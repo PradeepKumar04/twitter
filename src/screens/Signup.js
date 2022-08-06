@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Signup.module.css';
 import  Axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { signupAction } from '../actions/signupAction';
 
 
 const initialState={
@@ -16,7 +17,15 @@ const Signup = (props) => {
     const dispatch=useDispatch();
     const history=useHistory();
    
-    const loginData=useSelector(state=>state.login);
+    const signupData=useSelector(state=>state.signup);
+
+    useEffect(()=>{
+        console.log(signupData);
+        if(signupData.data.success){
+            
+            localStorage.setItem('token',`Bearer ${signupData.data.data}`);
+        }
+    },[signupData]);
 
     const formIsDirty = true; 
     const onLogin=()=>{
@@ -101,8 +110,19 @@ const Signup = (props) => {
             // formData.append("upload_preset","midc4hmi");
             // var data=await Axios.post('https://api.cloudinary.com/v1_1/dcpyzzvui/image/upload',formData);
             // console.log(data);
-        if(firstnameValidation.isValid && lastnameValidation.isValid && emailValidation.isValid && usernameValidation.isValid && phonenumberValidation.isValid && dateofBirthValidation.isValid && passwordValidation.isValid && confirmPasswordValidation.isValid && gender!=="0"){
-            
+        if(confirmPassword==password && firstnameValidation.isValid && lastnameValidation.isValid && emailValidation.isValid && usernameValidation.isValid && phonenumberValidation.isValid && dateofBirthValidation.isValid && passwordValidation.isValid && confirmPasswordValidation.isValid && gender!=="0"){
+            var dob=dateofBirth.split('-');
+            let data={
+                Email:email,
+                FirstName:firstname,
+                LastName:lastname,
+                UserName:username,
+                Password:password,
+                DateOfBirth:dob[2]+'-'+dob[1]+'-'+dob[0],
+                PhoneNumber:phonenumber,
+                Gender:+gender
+            }
+            await dispatch(signupAction(data));
         }
     }
     

@@ -49,6 +49,7 @@
 .tweetActions{
     float: left;
     margin-left: 150px;
+    cursor: pointer;
 }
 
 .like{
@@ -84,4 +85,10 @@
 
 .postTime{
     font-size: 15px;
+}
+
+.reply{
+    position: absolute;
+    font-size: 17px;
+    margin-left: 5px;
 }

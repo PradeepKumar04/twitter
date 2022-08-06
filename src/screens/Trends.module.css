@@ -1,0 +1,45 @@
+.card{
+    font-size: 15px;
+    height: 100vh;
+    /* position: fixed; */
+    background-color: white;
+    /* padding: 0px; */
+}
+
+.font{
+    font-size: 15px;
+    margin-top: 20px;
+
+}
+
+.trends{
+    background-color: grey;
+}
+
+.border{
+    background-color: #E4E9F7;
+}
+
+
+.showmore{
+    cursor: pointer;
+}
+
+.users{
+    max-height: 40vh;
+    scrollbar-width: thin;
+    overflow-y: scroll;
+}
+
+.usersWithSearch{
+    max-height: 60vh;
+    scrollbar-width: thin;
+    overflow-y: scroll;
+}
+
+.search{
+    float: right;
+    margin-top: -30px;
+    margin-right: 10px;
+
+}

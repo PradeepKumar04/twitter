@@ -9,7 +9,7 @@ export const LoginUserAction=(data)=>async(dispatch)=>{
         const response= await axios.post(`https://localhost:44387/api/Authentication/login`, data);
         dispatch({
             type:ActionTypes.LOGIN_SUCCESS,
-            payload: response
+            payload: response.data
         })
     } catch (error) {
         dispatch({
