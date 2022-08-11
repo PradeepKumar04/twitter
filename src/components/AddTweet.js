@@ -1,39 +1,47 @@
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
-import React, { memo, useRef,useState } from "react";
-import {useSelector,useDispatch} from 'react-redux';
+import React, { memo, useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { postTweetAction } from "../actions/postTweetAction";
+import { POST_TWEET } from "../API/Endpoints";
+import postData from "../hooks/postData";
+import putData from "../hooks/putData";
 import classes from "./AddTweet.module.css";
 
 const AddTweet = (props) => {
-  const textareaRef = useRef();
-    const [tweetText,setTweetValue]=useState('');
-    const [isImageClick,setImageClick]=useState([]);
-    const [image,setImage]=useState([]);
-    const [uploadedImages,setUploadedImages]=useState([]);
-  
-    const onEmojiChange=(emoji)=>{
-    setTweetValue(tweetText+emoji);
+  const [tweetText, setTweetValue] = useState(props.message);
+  const [isImageClick, setImageClick] = useState(props.images);
+  const [id, setId] = useState(props.id);
+  const [postImages,setPostImages]=useState([]);
+
+
+  useEffect(() => {
+    console.log(props);
+    setTweetValue(props.message);
+    setImageClick(props.images);
+    setId(props.id);
+  }, [props.message]);
+
+  const onEmojiChange = (emoji) => {
+    setTweetValue(tweetText + emoji);
     console.log(emoji);
   }
 
-  const dispatch=useDispatch();
- 
+  const dispatch = useDispatch();
 
 
-  const onImageRemove=(index)=>{
-    isImageClick.splice(index,1);
-    image.slice(index,1);
-    setImage([...image]);
+
+  const onImageRemove = (index) => {
+    isImageClick.splice(index, 1);
     setImageClick([...isImageClick]);
   }
 
-  const onImageClick=(event)=>{
-    let imagePaths=[];
-    let originalImages=[];
+  const onImageClick = (event) => {
+    let imagePaths = [];
+    let originalImages = [];
     console.log(event.target.files[0]);
-    
+
     for (let index = 0; index < event.target.files.length; index++) {
       const element = event.target.files[index];
       imagePaths.push(URL.createObjectURL(element));
@@ -46,63 +54,50 @@ const AddTweet = (props) => {
     //     imagePaths.push(URL.createObjectURL(event.target.files[key]));
     //   }
     // }
-    setImage([...image,...originalImages]);
-     setImageClick([...isImageClick,...imagePaths]);
-     event.target.files=null;
+    setImageClick([...isImageClick, ...imagePaths]);
+    event.target.files = null;
   }
 
-  const onImageUpload=async ()=>{
-    let images=[];
-    const uploaders = image.map(file => {
-      // Initial FormData
+
+  const onPostTweet = async(e) => {
+    e.preventDefault();
+    let urls=[];
+   const uploadUrls=  await Promise.all(isImageClick.map(async (file) => {
+    // Initial FormData
+    await fetch(file).then(r => r.blob()).then(async(filedata) => {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "ykxo9ke1"); 
-      formData.append("api_key", "258248519656872"); 
+      formData.append("file", filedata);
+      formData.append("upload_preset", "ykxo9ke1");
+      formData.append("api_key", "258248519656872");
       formData.append("timestamp", (Date.now() / 1000) | 0);
-      
-      
-       axios.post("https://api.cloudinary.com/v1_1/dcpyzzvui/image/upload", formData, {
+     await axios.post("https://api.cloudinary.com/v1_1/dcpyzzvui/image/upload", formData, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       }).then(response => {
         const data = response.data;
         const fileURL = data.secure_url // You should store this URL for future references in your app
-        setUploadedImages([...uploadedImages,fileURL]);
-        images=[...uploadedImages,fileURL];
+        urls.push(fileURL);
       })
     });
-    return images;
-  }
+  }));
+  console.log(urls);
+    let data = {
+      Message: tweetText,
+      UserId: "",
+      ImagePath: urls,
+      LikedUsers: [],
+      ReplyTweets: []
+    }
 
-  const onPostTweet=async(e)=>{
-    e.preventDefault();
-  let images= await onImageUpload();
-  console.log(images);
-    let data={
-      Message:tweetText,
-      UserId:"",
-      ImagePath:uploadedImages,
-      LikedUsers:[],
-      ReplyTweets:[]
-  }
-  console.log(uploadedImages);
- let response=await dispatch(postTweetAction(data));
- props.onPost();
-  //console.log(response);
-  setTweetValue('');
-  setUploadedImages([]);
-  setImage([]);
-  setImageClick([]);
-//     var formData=new FormData();
-//     for ( const file of isImageClick ) {
-//       formData.append('file', file);
-//     }
-//     formData.append('upload_preset', 'twitter_posts');
-//     const data = await fetch('https://api.cloudinary.com/v1_1/dcpyzzvui/image/upload', {
-//   method: 'POST',
-//   body: formData
-// }).then(r => r.json());
-// console.log(data);
+    
+   await postData(POST_TWEET,data).then((data)=>{
+        if(data.data.success){
+          props.onPost();
+          setId(null);
+          setTweetValue('');
+          setImageClick([]);
+        }
+      })
+  //   //console.log(response);
   }
 
   return (
@@ -114,15 +109,15 @@ const AddTweet = (props) => {
           cols={20}
           placeholder="What's happening?"
           value={tweetText}
-          onChange={(e)=>{setTweetValue(e.target.value)}}
-          ref={textareaRef}
+          onChange={(e) => { setTweetValue(e.target.value) }}
           className={"form-control " + classes.textarea}
         />
       </div>
       <div className={classes.imagePreview}>
         {
-          isImageClick.map((ele,index)=>{
-             return <p className={classes.img} key={index}><img id={"output"+index}  src={ele} width="150" /><span className={"material-symbols-outlined "+classes.cancel} onClick={()=>{onImageRemove(index)}}>cancel</span></p>
+
+          isImageClick.map((ele, index) => {
+            return <p className={classes.img} key={index}><img id={"output" + index} src={ele} width="150" /><span className={"material-symbols-outlined " + classes.cancel} onClick={() => { onImageRemove(index) }}>cancel</span></p>
           })
         }
       </div>
@@ -135,7 +130,7 @@ const AddTweet = (props) => {
                   add_a_photo
                 </span>
               </label>
-              <input id="file-input" type="file" multiple   name="image"  onChange={onImageClick} />
+              <input id="file-input" type="file" multiple name="image" onChange={onImageClick} />
             </div>
           </div>
           <div className="col">
@@ -153,4 +148,4 @@ const AddTweet = (props) => {
   );
 };
 
-export default memo( AddTweet);
+export default memo(AddTweet);

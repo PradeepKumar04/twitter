@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './SideNavbar.css';
 import { BrowserRouter,Switch, Routes, Route } from 'react-router-dom';
@@ -6,11 +6,15 @@ import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import Home from '../screens/Home';
 import ProtectedRoute from '../auth/ProtectedRoute';
+import SingleTweet from '../screens/SingleTweet';
+import UserProfile from '../screens/UserProfile';
+import ResetPassword from '../screens/ResetPassword';
 
 const SideNavbar = () => {
 
   const [toggleClass,settoggleClass]= useState('sidebar');
   const [toggleDarkClass,setDarktoggleClass]= useState('');
+  const [isLogin,setLogin]=useState(false);
 
   const toggleDarkButton =()=>{
     toggleDarkClass==''?setDarktoggleClass('dark'):setDarktoggleClass('');
@@ -19,6 +23,10 @@ const SideNavbar = () => {
   const toggleNavbar=()=>{
    toggleClass=='sidebar'?settoggleClass('sidebar close'):settoggleClass('sidebar');
   }
+
+  useEffect(()=>{
+    setLogin(localStorage.getItem('token')!==undefined)
+  },[]);
 
   return (
     <body className={toggleDarkClass}>
@@ -57,23 +65,15 @@ const SideNavbar = () => {
 
                       <li class="nav-link">
                       <NavLink  to='/account' className={isActive => "nav-link" + (!isActive ? "" : " active")}>
-                              <i class='bx bx-bar-chart-alt-2 icon' ></i>
-                              <span class="text nav-text">Revenue</span>
+                              <i class='bx bx-profile-alt icon' ></i>
+                              <span class="text nav-text">Accounts</span>
                         </NavLink>
                       </li>
-
                       <li class="nav-link">
-                      <NavLink  to='/signup' className={isActive => "nav-link" + (!isActive ? "" : " active")}>
-                              <i class='bx bx-bell icon'></i>
-                              <span class="text nav-text">Notifications</span>
-                              </NavLink>
-                      </li>
-
-                      <li class="nav-link">
-                          <a href="#">
-                              <i class='bx bx-pie-chart-alt icon' ></i>
-                              <span class="text nav-text">Analytics</span>
-                          </a>
+                      <NavLink  to='/reset' className={isActive => "nav-link" + (!isActive ? "" : " active")}>
+                              <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                              <span class="text nav-text">Reset Password</span>
+                        </NavLink>
                       </li>
                   </ul>
               </div>
@@ -91,12 +91,12 @@ const SideNavbar = () => {
                       </div>
                   </li>
 
-                  <li class="">
+                  {isLogin && <li class="">
                       <a href="#">
                           <i class='bx bx-log-out icon' ></i>
                           <span class="text nav-text">Logout</span>
                       </a>
-                  </li>
+                  </li>}
               </div>
           </div>
 
@@ -105,8 +105,11 @@ const SideNavbar = () => {
         
         <Switch>
                 {/* <Route exact  path='/home' component={Home} /> */}
-                <ProtectedRoute  path='/home' component={Home} />
                 <Route exact path='/account' component={Login} />
+                <ProtectedRoute  path='/home/profile/:username' component={UserProfile} />
+                <ProtectedRoute exact  path='/home/:id' component={SingleTweet} />
+                <ProtectedRoute  path='/home' component={Home} />
+                <ProtectedRoute path='/reset' component={ResetPassword} />
         </Switch>
     </section>
         </div>

@@ -12,14 +12,21 @@ import getData from '../hooks/getData';
 import { GETALLTWEETS } from '../API/Endpoints';
 
 const Home = () => {
-  const [focus,setFocus]=useState(false);
-  const dispatch=useDispatch();
+  
   const [isPostData,getPostData]=useState(false);
   const [tweetsData,setTweetsData]=useState([]);
+  const [message,setMessage]=useState('');
+  const[images,setImages]=useState([]);
+  const [id,setId]=useState(null);
  
   // const tweets=useSelector(state=>state.getTweets);
 // console.log(tweets);
 
+const onEditTweet=(tweet)=>{
+  setMessage(tweet.message);
+  setImages(tweet.images);
+  setId(tweet.id);
+}
 
 const onPostData=()=>{
   getPostData(!isPostData);
@@ -41,10 +48,10 @@ const onPostData=()=>{
         {
           
         tweetsData.length<=0    ?'':<div className={'col '+classes.col}>
-            <AddTweet  onFocus={focus} onPost={onPostData} /> 
+            <AddTweet   onPost={onPostData} message={message} images={images} id={id} /> 
             {
               tweetsData.map((tweet)=>{
-                return <Tweet message={tweet.message} id={tweet.id} images={tweet.imagePath} likedUsers={tweet.likedUsers} replyTweets={tweet.replyTweets} uploadDate={tweet.uploadDate} user={tweet.user}/>
+                return <Tweet message={tweet.message} isPostData={onPostData} onEdit={onEditTweet} id={tweet.id} images={tweet.imagePath} likedUsers={tweet.likedUsers} replyTweets={tweet.replyTweets} uploadDate={tweet.uploadDate} user={tweet.user}/>
               })
             }
         </div>
@@ -54,8 +61,6 @@ const onPostData=()=>{
           <Trends/>
         </div>
       </div>
-       
-        
     </div>
   )
 }

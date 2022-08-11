@@ -29,7 +29,7 @@ const ProtectedRoute = ({component: Component, path:path}) => {
     return (
         <>
         {
-            isLogin()?<Route path='/home' exact component={Component}/>:<Redirect to='/account' />
+            isLogin()?<Route path={path} exact component={Component}/>:<Redirect to='/account' />
         }
         </>
 

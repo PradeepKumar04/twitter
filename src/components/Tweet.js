@@ -4,6 +4,8 @@ import SimpleImageSlider from "react-simple-image-slider";
 import axios from 'axios';
 import putData from '../hooks/putData';
 import { DOMAIN } from '../API/Endpoints';
+import deleteData from '../hooks/deleteData';
+import { useHistory } from 'react-router-dom';
 
 
 const Tweet = (props) => {
@@ -12,6 +14,8 @@ const Tweet = (props) => {
     const images=props.images.map((res)=> {return {url:res}});
     const[isEdit,setIsEdit]=useState(false);
     const[likes,setLikes]=useState(props.likedUsers.length);
+    const history=useHistory();
+
     useEffect(()=>{
       if(props.likedUsers.length>0){
        let isliked= props.likedUsers.some((user)=>{
@@ -34,6 +38,36 @@ const Tweet = (props) => {
         console.log(e);
     }
 
+    const onEditImage=()=>{
+      let imgs=images.slice();
+      let imaged=[];
+      for (let index = 0; index < imgs.length; index++) {
+        imaged.push(imgs[index].url);
+      }
+      let data={
+        message:props.message,
+        images:imaged,
+        id: props.id
+      }
+
+      setIsEdit(false);
+      props.onEdit(data);
+    }
+
+    const onDeletePost=async()=>{
+      await deleteData(DOMAIN+'Tweet/'+localStorage.getItem('username')+'/delete/'+props.id);
+      props.isPostData()
+      setIsEdit(false);
+    }
+
+    const onComment=()=>{
+      history.push({pathname:`/home/${props.id}`,tweetData:props});
+    }
+
+    const onViewProfile=()=>{
+      history.push(`/home/profile/${props.user.userName}`);
+    }
+
     const onActionClick=(e)=>{
         setIsEdit(!isEdit);
     }
@@ -43,7 +77,7 @@ const Tweet = (props) => {
     <h5 class="card-title">
             <div className='row'>
               <div className='col-12'>
-                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600" className={classes.profilePic} alt="" />
+                  <img onClick={onViewProfile} src="https://res.cloudinary.com/dcpyzzvui/image/upload/v1659853355/My%20Uploads/ua6ynafvoijcla7vpade.png" className={classes.profilePic} alt="" />
                   <div className={classes.name}>
                       <b>{props.user.firstName+" "+props.user.lastName} <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" className={classes.verifiedTick} /></b>
                       <p>@{props.user.userName}</p>
@@ -53,8 +87,8 @@ const Tweet = (props) => {
                   </div>
                 { isEdit && <div className={'card '+classes.actionCard}>
                               <ul class="list-group">
-                                { props.user.userName==localStorage.getItem('username') && <li class={"list-group-item " + classes.listItem}>Edit Post</li>}
-                                 { props.user.userName==localStorage.getItem('username') && <li class={"list-group-item " + classes.listItem}>Delete Post</li>}
+                                { props.user.userName==localStorage.getItem('username') && <li class={"list-group-item " + classes.listItem} onClick={onEditImage}>Edit Post</li>}
+                                 { props.user.userName==localStorage.getItem('username') && <li class={"list-group-item " + classes.listItem} onClick={onDeletePost} >Delete Post</li>}
                                   <li class={"list-group-item " + classes.listItem}>Report </li>
                                   <li class={"list-group-item " + classes.listItem}>Porta ac consectetur ac</li>
                                   <li class={"list-group-item " + classes.listItem}>Vestibulum at eros</li>
@@ -65,7 +99,7 @@ const Tweet = (props) => {
             </div>
     </h5>
     <p class={"card-text "+classes.tweetCaption}>{props.message}</p>
-    <p class={"card-text "+classes.postTime }><small class="text-muted">{new Date(props.uploadDate).toDateString()}</small></p>
+    
     {/* <img src="https://c0.piktochart.com/v2/themes/1449-content-checklist-twitter-post/snapshot/large.jpg" class={"card-img-top "+ classes.postImage} alt="..."/> */}
   { images.length>0 && <SimpleImageSlider
         width={700}
@@ -76,15 +110,16 @@ const Tweet = (props) => {
         showBullets={true}
         showNavs={true}
       />}
+    <p class={"card-text "+classes.postTime }><small class="text-muted">{new Date(props.uploadDate).toDateString()}</small></p>
     <hr/>
     <p class={"card-text "+classes.postTime }> { `${likes} likes`}</p>
     <hr/>
     <div className='row'>
-        <div className={'col '+classes.tweetActions}>
+        <div className={'col '+classes.tweetActions} onClick={onComment}>
         <span class="material-symbols-outlined">mode_comment</span><span className={classes.reply}>{props.replyTweets.length}</span>
         </div>
         <div className={'col '+classes.tweetActions}>
-            retweet
+           <i class="fa fa-retweet" aria-hidden="true"></i>
         </div>
         <div className={'col '+classes.tweetActions} title={like}>
             <div className={classes[like]} onClick={onLike}>
@@ -92,6 +127,7 @@ const Tweet = (props) => {
             </div>
         </div>
     </div>
+    
   </div>
   
 </div>

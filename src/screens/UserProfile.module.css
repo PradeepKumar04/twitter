@@ -1,0 +1,83 @@
+.icon{
+    display: inline;
+    float: right;
+    padding-right: 5px;
+}
+
+
+.overflow{
+    overflow-x:auto;
+}
+
+.back{
+    background-color: whitesmoke; margin-top: 12%;
+}
+
+.white{
+    background-color: whitesmoke;
+}
+
+.profile{
+    border-radius: 50%;
+    margin-top: -40px;
+}
+
+.tabs{
+    margin-top: 10px;
+}
+
+.tabElements1{
+    color: black; font-weight: bold; font-size: 20px;
+}
+
+.tabElements2{
+    color: rgb(68, 62, 231); font-weight: bold;font-size: 30px
+}
+
+.twitter{
+    color: black; font-weight: bold; margin-bottom: 0px;
+}
+
+.block{
+    background-color: aliceblue; border: 1px;border-color: rgb(104, 103, 103); border-radius: 5px;
+}
+
+.message{
+    color: black; margin-top: 5px;
+}
+
+.message1{
+    color: rgb(79, 133, 215); margin-top: 5px;
+}
+
+.tweetmessage{
+    font-size: 30px;
+}
+
+.aqua{
+    color: aqua;
+}
+
+.black{
+    color: black;
+}
+
+.time{
+    color:rgb(99, 96, 96)
+}
+
+.colMd{
+    background-color: rgb(194, 193, 191);
+}
+
+.heading{
+    color: black; font-weight: bold; font-size: 20px;
+}
+
+.contenet{
+    border: 5px 5px 5px 5px; border-color: rgb(146, 146, 249);
+}
+
+.height{
+    height: auto;
+}

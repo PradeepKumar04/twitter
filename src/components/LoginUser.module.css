@@ -1,6 +1,6 @@
 .eye{
     cursor: pointer;
-    margin-left: -140%;
+    margin-left: -120%;
     margin-top: 2%;
 }
 
@@ -27,6 +27,12 @@
     color: #1DA1F2;
     cursor: pointer;
     float: right;
+}
+
+.left{
+    float: left;
+    color: #1DA1F2;
+    cursor: pointer;
 }
 
 .formErrors{

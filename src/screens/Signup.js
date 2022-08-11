@@ -4,6 +4,8 @@ import  Axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { signupAction } from '../actions/signupAction';
+import postData from '../hooks/postData';
+import { REGISTER_USER } from '../API/Endpoints';
 
 
 const initialState={
@@ -14,18 +16,18 @@ const initialState={
 
 const Signup = (props) => {
 
-    const dispatch=useDispatch();
+    // const dispatch=useDispatch();
     const history=useHistory();
    
-    const signupData=useSelector(state=>state.signup);
+    // const signupData=useSelector(state=>state.signup);
 
-    useEffect(()=>{
-        console.log(signupData);
-        if(signupData.data.success){
+    // useEffect(()=>{
+    //     console.log(signupData);
+    //     if(signupData.data.success){
             
-            localStorage.setItem('token',`Bearer ${signupData.data.data}`);
-        }
-    },[signupData]);
+    //         localStorage.setItem('token',`Bearer ${signupData.data.data}`);
+    //     }
+    // },[signupData]);
 
     const formIsDirty = true; 
     const onLogin=()=>{
@@ -48,6 +50,7 @@ const Signup = (props) => {
     const [password,changePassword]=useState('');
     const[confirmPassword,changeConfirmPassword]=useState('');
     const[gender,changeGender]=useState('0');
+    const [error,setError]=useState('');
 
     const [firstnameValidation,changeFirstnameValidation]=useState(initialState);
     const [lastnameValidation,changeLastnameValidation]=useState(initialState);
@@ -70,6 +73,16 @@ const Signup = (props) => {
             changeFirstnameValidation({isTouched:true,isValid:true,error:''});
         }
     }
+
+    function parseJwt (token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    
+        return JSON.parse(jsonPayload);
+    };
 
     const onFormSubmit= async (e)=>{
         e.preventDefault();
@@ -122,7 +135,17 @@ const Signup = (props) => {
                 PhoneNumber:phonenumber,
                 Gender:+gender
             }
-            await dispatch(signupAction(data));
+            await postData(REGISTER_USER,data).then((res)=>{
+                if(res.data.success){
+                    localStorage.setItem('token',`Bearer ${res.data.data}`);
+                    let userdata =parseJwt(res.data.data);
+                    localStorage.setItem('username',userdata['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'])
+                    history.push('/home');
+                }
+                else{
+                    setError(res.data.message);
+                }
+            })
         }
     }
     
@@ -218,6 +241,7 @@ const Signup = (props) => {
 
   return (
     <div className={'container '+classes.container}>
+        <p className="text-left text-danger">{error}</p>
         <form onSubmit={onFormSubmit}>
         <div className='row'>
             <div className='col p-2'>
