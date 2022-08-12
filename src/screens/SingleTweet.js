@@ -3,7 +3,7 @@ import classes from './SingleTweet.module.css';
 import SimpleImageSlider from "react-simple-image-slider";
 import postData from '../hooks/postData';
 import { DOMAIN, GETALLTWEETS } from '../API/Endpoints';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import getData from '../hooks/getData';
 import putData from '../hooks/putData';
 
@@ -19,6 +19,7 @@ const initialState={
 
 const SingleTweet = (props) => {
     console.log(props);
+    const history=useHistory();
     const [like, setLike] = useState('dislike');
     const tweetId=useParams();
     const [images,setImages]=useState([]);
@@ -60,6 +61,10 @@ const SingleTweet = (props) => {
 
     }
 
+    const onprofile=()=>{
+        history.push(`/home/profile/${props.location.tweetData.user.userName}`)
+    }
+
     const onLike=async()=>{
         like=='like'?setLike('dislike'):setLike('like');
         if(like==='like'){
@@ -78,7 +83,7 @@ const SingleTweet = (props) => {
                 <h5 class="card-title">
                     <div className='row'>
                         <div className='col-12'>
-                            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600" className={classes.profilePic} alt="" />
+                            <img  onClick={onprofile} src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600" className={classes.profilePic} alt="" />
                             <div className={classes.name}>
                                 <b>{tweet.user.firstName+' '+tweet.user.lastName} <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" className={classes.verifiedTick} /></b>
                                 <p>@{tweet.user.userName}</p>
@@ -111,14 +116,14 @@ const SingleTweet = (props) => {
                     showNavs={true}
                 />}
                 <hr />
-                <p class={"card-text " + classes.postTime}> {`${likes} likes`}</p>
+                <p class={"card-text " + classes.postTime}> {`${likes} ${likes==1?'like':'likes'}`}</p>
                 <hr />
                 <div className='row'>
                     <div className={'col ' + classes.tweetActions} >
                         <span class="material-symbols-outlined">mode_comment</span><span className={classes.reply}>{replies.length}</span>
                     </div>
                     <div className={'col ' + classes.tweetActions}>
-                        retweet
+                    <span class="iconify" data-icon="ei:retweet"></span>
                     </div>
                     <div className={'col ' + classes.tweetActions} title={like}>
                         <div className={classes[like]} onClick={onLike} >
@@ -141,7 +146,7 @@ const SingleTweet = (props) => {
                 return <div class={"card " + classes.tweetCard} key={index}>
                 <div className={'row ' + classes.comments}>
                     <div className='col-12'>
-                        <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600" className={classes.profilePic} alt="" />
+                        <img onClick={(e)=>{history.push(`/home/profile/${reply.userName}`)}} src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600" className={classes.profilePic} alt="" />
                         <div className={classes.name}>
                             <b>{reply.user.firstName+' '+reply.user.lastName}<img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" className={classes.verifiedTick} /></b>
                             <p>{reply.userName}</p>

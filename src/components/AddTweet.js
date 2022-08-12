@@ -4,7 +4,7 @@ import React, { memo, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { postTweetAction } from "../actions/postTweetAction";
-import { POST_TWEET } from "../API/Endpoints";
+import { EDIT_TWEET, POST_TWEET } from "../API/Endpoints";
 import postData from "../hooks/postData";
 import putData from "../hooks/putData";
 import classes from "./AddTweet.module.css";
@@ -15,7 +15,7 @@ const AddTweet = (props) => {
   const [id, setId] = useState(props.id);
   const [postImages,setPostImages]=useState([]);
 
-
+  console.log(props);
   useEffect(() => {
     console.log(props);
     setTweetValue(props.message);
@@ -80,6 +80,7 @@ const AddTweet = (props) => {
     });
   }));
   console.log(urls);
+  if(id==null){
     let data = {
       Message: tweetText,
       UserId: "",
@@ -97,6 +98,22 @@ const AddTweet = (props) => {
           setImageClick([]);
         }
       })
+  }
+  else{
+    let data = {
+      Message: tweetText,
+      Id: id,
+      ImagePath: urls
+    }
+    await putData(EDIT_TWEET,data).then((data)=>{
+      if(data.data.success){
+        props.onPost();
+          setId(null);
+          setTweetValue('');
+          setImageClick([]);
+      }
+    })
+  }
   //   //console.log(response);
   }
 

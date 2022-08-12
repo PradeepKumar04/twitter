@@ -52,6 +52,7 @@ const Tweet = (props) => {
 
       setIsEdit(false);
       props.onEdit(data);
+      window.scrollTo(0, 0)
     }
 
     const onDeletePost=async()=>{
@@ -83,15 +84,13 @@ const Tweet = (props) => {
                       <p>@{props.user.userName}</p>
                   </div>
                   <div className={"col-md-3 offset-md-1 "+classes.editSettings} onClick={onActionClick}>
-                      <p>&#8942;</p>
+                     {props.user.userName==localStorage.getItem('username') && <p>&#8942;</p>}
                   </div>
                 { isEdit && <div className={'card '+classes.actionCard}>
                               <ul class="list-group">
                                 { props.user.userName==localStorage.getItem('username') && <li class={"list-group-item " + classes.listItem} onClick={onEditImage}>Edit Post</li>}
                                  { props.user.userName==localStorage.getItem('username') && <li class={"list-group-item " + classes.listItem} onClick={onDeletePost} >Delete Post</li>}
-                                  <li class={"list-group-item " + classes.listItem}>Report </li>
-                                  <li class={"list-group-item " + classes.listItem}>Porta ac consectetur ac</li>
-                                  <li class={"list-group-item " + classes.listItem}>Vestibulum at eros</li>
+                                  
                               </ul>
                   </div>}
               </div>
@@ -112,7 +111,7 @@ const Tweet = (props) => {
       />}
     <p class={"card-text "+classes.postTime }><small class="text-muted">{new Date(props.uploadDate).toDateString()}</small></p>
     <hr/>
-    <p class={"card-text "+classes.postTime }> { `${likes} likes`}</p>
+    <p class={"card-text "+classes.postTime }> { `${likes} ${likes==1?'like':'likes'}`}</p>
     <hr/>
     <div className='row'>
         <div className={'col '+classes.tweetActions} onClick={onComment}>

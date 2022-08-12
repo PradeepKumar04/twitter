@@ -43,6 +43,10 @@ body.dark{
     --text-color: #ccc;
 }
 
+.logout{
+    cursor: pointer;
+}
+
 /* ===== Sidebar ===== */
  .sidebar{
     position: fixed;

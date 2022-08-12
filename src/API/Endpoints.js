@@ -6,6 +6,7 @@ export const GET_USERS=DOMAIN+'Authentication/Users';
 export const LOGIN=DOMAIN+'Authentication/login';
 export const FORGOT_PASSWORD=DOMAIN+'Authentication/ForgotPassword';
 export const RESET_PASSWORD=DOMAIN+'Authentication/ResetPassword';
+export const EDIT_TWEET=DOMAIN+'Tweet/Edit/Tweet';
 
 
 
