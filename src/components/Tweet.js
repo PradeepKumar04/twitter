@@ -118,7 +118,7 @@ const Tweet = (props) => {
         <span class="material-symbols-outlined">mode_comment</span><span className={classes.reply}>{props.replyTweets.length}</span>
         </div>
         <div className={'col '+classes.tweetActions}>
-           <i class="fa fa-retweet" aria-hidden="true"></i>
+           {/* <i class="fa fa-retweet" aria-hidden="true"></i> */}
         </div>
         <div className={'col '+classes.tweetActions} title={like}>
             <div className={classes[like]} onClick={onLike}>

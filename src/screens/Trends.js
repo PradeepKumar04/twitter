@@ -33,7 +33,7 @@ const Trends = () => {
                     
                      { searchValue=="" && <ul class={"list-group "+classes.font}>
                         <li className={"list-group-item "+classes.border}>
-                          <small className='text-secondary'>Trending in Cognizant</small>
+                          <small className='text-secondary'>Trending in IIHM</small>
                           <h3>#FSE1Presentation</h3>
                           <small className='text-secondary'>6999 Tweeets</small>
                         </li>

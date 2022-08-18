@@ -83,7 +83,7 @@ const SingleTweet = (props) => {
                 <h5 class="card-title">
                     <div className='row'>
                         <div className='col-12'>
-                            <img  onClick={onprofile} src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600" className={classes.profilePic} alt="" />
+                            <img  onClick={onprofile} src="https://res.cloudinary.com/dcpyzzvui/image/upload/v1659853355/My%20Uploads/ua6ynafvoijcla7vpade.png" className={classes.profilePic} alt="" />
                             <div className={classes.name}>
                                 <b>{tweet.user.firstName+' '+tweet.user.lastName} <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" className={classes.verifiedTick} /></b>
                                 <p>@{tweet.user.userName}</p>
@@ -146,7 +146,7 @@ const SingleTweet = (props) => {
                 return <div class={"card " + classes.tweetCard} key={index}>
                 <div className={'row ' + classes.comments}>
                     <div className='col-12'>
-                        <img onClick={(e)=>{history.push(`/home/profile/${reply.userName}`)}} src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600" className={classes.profilePic} alt="" />
+                        <img onClick={(e)=>{history.push(`/home/profile/${reply.userName}`)}} src="https://res.cloudinary.com/dcpyzzvui/image/upload/v1659853355/My%20Uploads/ua6ynafvoijcla7vpade.png" className={classes.profilePic} alt="" />
                         <div className={classes.name}>
                             <b>{reply.user.firstName+' '+reply.user.lastName}<img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" className={classes.verifiedTick} /></b>
                             <p>{reply.userName}</p>
